@@ -6,17 +6,20 @@ from fastapi import FastAPI
 from starlette.responses import StreamingResponse
 
 
-def genorateqrcode():
+def genorateqrcode(data, version, box_size, border):
     qr = qrcode.QRCode(
-        version=1,
+        version=version,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
+        box_size=box_size,
+        border=border,
     )
-    qr.add_data("Some data")
+    qr.add_data(data)
     qr.make(fit=True)
 
-    img = qr.make_image(fill_color="black", back_color="white")
+    img = qr.make_image(
+        fill_color="black",
+        back_color="white",
+    )
     img_bytes = io.BytesIO()
     img.save(img_bytes)
     img_bytes.seek(0)
@@ -27,8 +30,11 @@ app = FastAPI()
 
 
 @app.get("/qrcode")
-async def image_endpoint():
-    qrcode = genorateqrcode()
+async def qrcode_endpoint(
+    data: str = "Sample", version: int = None, box_size: int = 10, border: int = 4
+):
+    print(data)
+    qrcode = genorateqrcode(data, version, box_size, border)
     return StreamingResponse(qrcode, media_type="image/png")
 
 
