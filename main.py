@@ -30,13 +30,11 @@ app = FastAPI()
 
 
 @app.get("/qrcode")
-async def qrcode_endpoint(
-    data: str = "Sample", version: int = None, box_size: int = 10, border: int = 4
-):
+async def qrcode_endpoint(data: str = "Sample", version: int = None, box_size: int = 10, border: int = 4):
     print(data)
     qrcode = genorateqrcode(data, version, box_size, border)
     return StreamingResponse(qrcode, media_type="image/png")
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=7878)

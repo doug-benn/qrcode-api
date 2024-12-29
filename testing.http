@@ -1,0 +1,4 @@
+POST http://localhost:7878/qrcode
+content-type: application/json
+
+{"qrcData": "Hello World!"}
